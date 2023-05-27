@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigInteger;
+
 @Entity
 @Table(name = "mission", schema = "hackathon")
 @NoArgsConstructor
@@ -23,6 +25,14 @@ public class Mission {
     @Basic
     @Column(name = "description")
     private String description;
+
+    @Basic
+    @Column(name = "total")
+    private BigInteger total;
+
+    @Basic
+    @Column(name = "current")
+    private BigInteger current;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

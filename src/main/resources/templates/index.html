@@ -42,9 +42,74 @@
           <a class="nav-link text-white" href="#">Contact Us</a>
         </li>
       </ul>
-    </div>
+        <h1>Upload Image</h1>
+        <form id="imageUploadForm" enctype="multipart/form-data">
+            <input type="file" id="imageInput" accept="image/png">
+            <input type="text" id="userIdInput" placeholder="User ID">
+            <button type="submit">Upload</button>
+        </form>
+
+        <script>
+            document.getElementById('imageUploadForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const imageInput = document.getElementById('imageInput');
+                const userIdInput = document.getElementById('userIdInput');
+
+                const imageFile = imageInput.files[0];
+                const userId = userIdInput.value;
+
+                const formData = new FormData();
+                formData.append('image', imageFile);
+                formData.append('userId', userId);
+
+                fetch('/upload/image', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            console.log('Image uploaded successfully.');
+                        } else {
+                            console.log('Failed to upload image.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            });
+        </script>
+
+
   </div>
 </nav>
+
+  <h1>Get Image</h1>
+
+  <div id="imageContainer">
+      <img id="image" src="" alt="Image">
+  </div>
+
+  <script>
+      const userId = 1; // Replace with the desired user ID
+      const endpointURL = `/upload/image/${userId}`;
+
+      fetch(endpointURL)
+          .then(response => {
+              if (response.ok) {
+                  return response.blob();
+              } else {
+                  throw new Error('Failed to retrieve image.');
+              }
+          })
+          .then(blob => {
+              const imageURL = URL.createObjectURL(blob);
+              document.getElementById('image').src = imageURL;
+          })
+          .catch(error => {
+              console.error('Error:', error);
+          });
+  </script>
 
 
 
