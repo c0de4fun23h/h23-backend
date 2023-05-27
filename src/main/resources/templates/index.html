@@ -95,8 +95,6 @@
   </form>
 </div>
 
-
-
         <h2 class="mt-4">Payment List</h2>
         <table class="table mt-2">
             <thead>
@@ -109,50 +107,45 @@
                     <th></th>
                 </tr>
             </thead>
-            <tbody id="paymentTableBody"></tbody>
+            <tbody id="tableBody"></tbody>
         </table>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script>
         $(document).ready(function() {
-            // Завантаження списку платежів при завантаженні сторінки
-            loadPaymentList();
+            load();
 
-            // Додавання або оновлення платежу
-            $('#paymentForm').submit(function(e) {
+            $('#form').submit(function(e) {
                 e.preventDefault();
 
-                var paymentId = $('#paymentId').val();
-                var paymentData = {
-                    id: paymentId ? parseInt(paymentId) : null,
-                    type: $('#type').val(),
-                    cardNumber: $('#cardNumber').val(),
-                    expiryDate: $('#expiryDate').val(),
-                    transactionId: parseInt($('#transactionId').val())
+                var id = $('#id').val();
+                var data = {
+                    id: id ? parseInt(id) : null,
+                    name: $('#name').val(),
+                    description: $('#description').val(),
+                    userId: parseInt($('#userId').val())
                 };
 
-                if (paymentId) {
-                    updatePayment(paymentData);
+                if (id) {
+                    update(data);
                 } else {
-                    createPayment(paymentData);
+                    create(data);
                 }
             });
 
-            // Очищення форми при натисканні кнопки "Cancel"
             $('#cancelButton').click(function() {
                 resetForm();
             });
         });
 
-        // Завантаження списку платежів
-        function loadPaymentList() {
+        function load() {
             $.ajax({
-                url: '/payments',
+                url: '/mission',
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
-                    renderPaymentList(data);
+                    renderList(data);
                 },
                 error: function(xhr, status, error) {
                     console.error(error);
@@ -160,38 +153,29 @@
             });
         }
 
-        // Рендеринг списку платежів
-        function renderPaymentList(data) {
-            var paymentTableBody = $('#paymentTableBody');
-            paymentTableBody.empty();
+        function renderList(data) {
+            var tableBody = $('#tableBody');
+            tableBody.empty();
 
-            data.forEach(function(payment) {
+            data.forEach(function(data) {
                 var row = '<tr>' +
-                            '<td>' + payment.id + '</td>' +
-                            '<td>' + payment.type + '</td>' +
-                            '<td>' + payment.cardNumber + '</td>' +
-                            '<td>' + payment.expiryDate + '</td>' +
-                            '<td>' + payment.transactionId + '</td>' +
-                            '<td>' +
-                                '<button type="button" class="btn btn-primary btn-sm mr-2" onclick="editPayment(' + payment.id + ')">Edit</button>' +
-                                '<button type="button" class="btn btn-danger btn-sm" onclick="deletePayment(' + payment.id + ')">Delete</button>' +
-                            '</td>' +
-                        '</tr>';
+                            '<td>' + data.id + '</td>' +
+                            '<td>' + data.name + '</td>' +
+                            '<td>' + data.description + '</td>';
 
-                paymentTableBody.append(row);
+                tableBody.append(row);
             });
         }
 
-        // Створення платежу
-        function createPayment(paymentData) {
+        function create(data) {
             $.ajax({
-                url: '/payments',
+                url: '/mission',
                 type: 'POST',
                 contentType: 'application/json',
-                data: JSON.stringify(paymentData),
+                data: JSON.stringify(data),
                 success: function() {
                     resetForm();
-                    loadPaymentList();
+                    load();
                 },
                 error: function(xhr, status, error) {
                     console.error(error);
@@ -199,51 +183,15 @@
             });
         }
 
-        // Оновлення платежу
-        function updatePayment(paymentData) {
+        function update(paymentData) {
             $.ajax({
-                url: '/payments/' + paymentData.id,
+                url: '/mission/' + paymentData.id,
                 type: 'PUT',
                 contentType: 'application/json',
                 data: JSON.stringify(paymentData),
                 success: function() {
                     resetForm();
-                    loadPaymentList();
-                },
-                error: function(xhr, status, error) {
-                    console.error(error);
-                }
-            });
-        }
-
-        // Видалення платежу
-        function deletePayment(paymentId) {
-            if (confirm('Are you sure you want to delete this payment?')) {
-                $.ajax({
-                    url: '/payments/' + paymentId,
-                    type: 'DELETE',
-                    success: function() {
-                        loadPaymentList();
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(error);
-                    }
-                });
-            }
-        }
-
-        // Заповнення форми для редагування платежу
-        function editPayment(paymentId) {
-            $.ajax({
-                url: '/payments/' + paymentId,
-                type: 'GET',
-                dataType: 'json',
-                success: function(payment) {
-                    $('#paymentId').val(payment.id);
-                    $('#type').val(payment.type);
-                    $('#cardNumber').val(payment.cardNumber);
-                    $('#expiryDate').val(payment.expiryDate);
-                    $('#transactionId').val(payment.transactionId);
+                    load();
                 },
                 error: function(xhr, status, error) {
                     console.error(error);
