@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/session_db
-    username: root
-    password: rootroot
+    username: session
+    password: session
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
