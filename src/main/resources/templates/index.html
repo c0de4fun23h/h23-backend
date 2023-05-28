@@ -19,10 +19,10 @@
 
     <title>VOLONTER</title>
 </head>
-<body>
+<body style="background-color:#89E4EC;">
 
 
-  <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+  <nav class="navbar navbar-expand-lg bg-info bg-darken-xl">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">
       <img src="img/logo.png"width="70" height="50" />
@@ -47,24 +47,46 @@
   </div>
 </nav>
 
-  <h1>Mission List</h1>
-  <table id="missionTable">
+  <h1 class="text-center">Місії</h1>
+  <table class="myTable" id="missionTable">
       <thead>
       </thead>
       <tbody id="missionTableBody"></tbody>
   </table>
 
   <style>
-      table {
-          width: 100%;
-          border-collapse: collapse;
+      .myTable{
+          margin-left: auto;
+          margin-right: auto;
+          background-color: #7CC4CB;
       }
 
-      th, td {
-          padding: 8px;
-          text-align: left;
-          border-bottom: 1px solid #ddd;
+      .myTable td {
+          vertical-align: top;
+          padding: -100px; // play with it, change to padding: 0px for the beginning
+          width: 220px;
       }
+
+      .myTable tr {
+          vertical-align: top;
+          padding: -100px; // play with it, change to padding: 0px for the beginning
+          width: 220px;
+      }
+
+      .aside_items {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-around;
+      }
+      .item__photo {
+          width: 70%;
+          height: 70%;
+          border-radius: 10px;
+      }
+
+
+
+
   </style>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -96,20 +118,15 @@
 
             data.forEach(function(mission) {
                 var row =
-                    '<div class="myDiv">'+
-                        '<div>' +
-                        '    <tr>' + mission.name + '</tr>' +
-                        '</div>' +
-                        '<div>'  +
-                        '    <tr>' + mission.description + '</tr>' +
-                        '</div>' +
-                        '<div>' +
-                        '    <tr>' + mission.total + '</tr>' +
-                        '<div>' +
-                        '    <tr>' + mission.current + '</tr>' +
-                        '</div>' +
-                    '</div>' +
-                    '    <td><img id="' + mission.imageId + '" src="" alt="Mission Image"></td>';
+                    '<ul id="items" class="aside_items"><li>' +
+                        '<a href="#" data-toggle="modal" data-target="#missionModal" data-mission-id="' + mission.id + '">' +
+                        '<img class="item__photo" id="' + mission.imageId + '" src="" alt="farm">' +
+                        '<div class="item">' +
+                        '<h3 class="item__name">Name: ' + mission.name + '</h3>' +
+                        '<h5 class="item__location">Description: ' + mission.description + '</h5>' +
+                        '<h5 class="item__amoutOfLivestock">Current/ total: '+ mission.current + '/'  + mission.total + '</h5>' +
+                        '</a>'+
+                    '</li></ul>';
 
                 missionTableBody.innerHTML += row;
 
@@ -140,8 +157,75 @@
                 });
         }
 
+        function populateModal(missionData) {
+            document.getElementById('modalName').textContent = missionData.name;
+            document.getElementById('modalDescription').textContent = missionData.description;
+            document.getElementById('modalTotal').textContent = missionData.total;
+            document.getElementById('modalCurrent').textContent = missionData.current;
+
+            getImgById(missionData.imageId)
+                .then(buffer => {
+                    const byteArray = new Uint8Array(buffer);
+                    const imageBlob = new Blob([byteArray], { type: 'image/png' });
+                    const imageURL = URL.createObjectURL(imageBlob);
+
+                    const imageElement = document.getElementById('modalImage');
+                    imageElement.src = imageURL;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Handle the error if needed
+                });
+        }
+
+        function getMissionById(id) {
+            return fetch(`/mission/${id}`)
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Failed to retrieve mission.');
+                    }
+                });
+        }
+
+        document.getElementById('missionModal').addEventListener('show.bs.modal', function (event) {
+            let missionId = event.relatedTarget.dataset.id;
+            getMissionById(1)
+                .then(missionData => {
+                    populateModal(missionData);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Handle the error if needed
+                });
+        });
+
 
     </script>
+  <!-- Modal -->
+  <div class="modal fade" id="missionModal" tabindex="-1" role="dialog" aria-labelledby="missionModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="missionModalLabel">Mission Details</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                  <h6>Name: <span id="modalName"></span></h6>
+                  <p>Description: <span id="modalDescription"></span></p>
+                  <p>Total: <span id="modalTotal"></span></p>
+                  <p>Current: <span id="modalCurrent"></span></p>
+                  <img class="mission-image" id="modalImage" src="" alt="Mission Image">
+              </div>
+          </div>
+      </div>
+  </div>
+
+
+
 
 
 </body>
