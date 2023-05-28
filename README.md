@@ -1,4 +1,4 @@
-# Finance monitoring backend by c0de4fun
+# Service for volunteering backend by c0de4fun
 
 ## Tech stack used
 
