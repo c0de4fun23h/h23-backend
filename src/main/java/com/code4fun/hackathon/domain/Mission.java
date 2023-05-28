@@ -45,8 +45,9 @@ public class Mission {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "image_id",unique = true)
-    private Long imageId;
+    @OneToOne
+    @JoinColumn(name = "image_id", referencedColumnName = "id")
+    private Image image;
 
 
 }

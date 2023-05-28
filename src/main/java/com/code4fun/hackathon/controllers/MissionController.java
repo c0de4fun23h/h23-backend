@@ -16,6 +16,11 @@ public class MissionController {
 
     private final MissionServiceImpl missionService;
 
+    @RequestMapping("/create")
+    public String create() {
+        return "createMission";
+    }
+
     @Autowired
     public MissionController(MissionServiceImpl missionService) {
         this.missionService = missionService;

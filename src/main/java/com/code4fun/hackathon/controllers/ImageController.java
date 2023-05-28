@@ -27,7 +27,7 @@ public class ImageController {
     }
 
     @RequestMapping("/upload/create")
-    public String welcome() {
+    public String create() {
         return "createImage";
     }
 
@@ -43,7 +43,7 @@ public class ImageController {
         }
     }
 
-    @GetMapping("/upload/image/{Id}")
+    @GetMapping("/upload/image/{id}")
     public ResponseEntity<byte[]> getImageById(@PathVariable Long id) {
         Image images = imageService.findById(id);
         if (images != null) {
