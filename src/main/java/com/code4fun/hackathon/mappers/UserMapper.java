@@ -8,7 +8,7 @@ import org.mapstruct.factory.Mappers;
 import java.util.List;
 
 @Mapper(componentModel = "spring", uses = {MissionMapper.class})
-public interface UserMapper extends GeneralMapper<UserDto, User>{
+public interface UserMapper extends GeneralMapper<UserDto, User> {
 
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
@@ -18,7 +18,6 @@ public interface UserMapper extends GeneralMapper<UserDto, User>{
     @InheritInverseConfiguration
     @Mapping(target = "missions", ignore = true)
     User toEntity(UserDto dto);
-
 
     @IterableMapping(qualifiedByName = "forDtoList")
     List<UserDto> toDtoList(List<User> entityList);

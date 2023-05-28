@@ -46,9 +46,6 @@ public class User {
     @Column(name = "user_phone_number")
     private String userPhoneNumber;
 
-    @OneToMany(fetch = FetchType.EAGER,mappedBy = "user")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     private List<Mission> missions;
-
-
-
 }
