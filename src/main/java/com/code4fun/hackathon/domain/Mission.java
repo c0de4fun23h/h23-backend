@@ -4,11 +4,13 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigInteger;
+import java.time.Instant;
 
 @Entity
-@Table(name = "mission", schema = "hackathon")
+@Table(name = "mission")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -34,8 +36,17 @@ public class Mission {
     @Column(name = "current")
     private BigInteger current;
 
+    @Basic
+    @Column(name = "create_date")
+    @CreationTimestamp
+    private Instant createdOn;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @Column(name = "image_id",unique = true)
+    private Long imageId;
+
 
 }

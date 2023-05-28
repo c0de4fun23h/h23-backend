@@ -20,14 +20,15 @@ public class ImageServiceImpl {
     }
 
     @Transactional
-    public void saveImage(byte[] imageData, Long userId) {
+    public void saveImage(byte[] imageData) {
         Image imageEntity = new Image();
         imageEntity.setImageData(imageData);
-        imageEntity.setUserId(userId);
         imageRepository.save(imageEntity);
     }
 
-    public Image getImageByUserId(Long userId) {
-        return imageRepository.findByUserId(userId);
+    public Image findById(Long id){
+        return imageRepository.findById(id).orElse(null);
     }
+
+
 }

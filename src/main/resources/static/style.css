@@ -84,3 +84,81 @@ table.table .form-control.error {
 table.table td .add {
     display: none;
 }
+#wrap {
+    display: flex;
+    justify-content: center;
+}
+.gay_element {
+    border: 1px solid black;
+    /* overflow:auto;  */
+    box-sizing: border-box;
+    margin-top: 15px;
+    width: 750px;
+}
+.gay_element a {text-decoration: none;
+color: black;
+display: flex;
+/* flex-direction: row; */
+white-space:pre-line;
+}
+.gay_element a:hover {
+    text-decoration: none;
+    color: black;
+}
+
+.xui {
+    word-break: break-all;
+}
+.gay_element  a h3 {
+    overflow-wrap: break-word;
+    margin-top: 15px;
+    margin-right: 15px;
+}
+.gay_element a p {
+    display: flex;
+    margin: 0;
+}
+.gay_element img {
+    max-width: 50%;
+    max-height: 150px;
+    margin: 15px 15px 15px 15px;
+}
+#myModal {
+    align-items: center;
+}
+.modal {
+    display: none; /* Hide the modal by default */
+    z-index: 1; /* Make it appear above the page */
+    background-color: rgba(0, 0, 0, 0.5); /* Black background with transparency */
+  }
+  
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+  }
+  .make-donation {
+    border-radius: 40px;
+    border: 0;
+    padding: 10px;
+    width: 400px;
+    margin-left: 75px;
+    margin-bottom: 15px;
+    background: darkgray;
+  }
+  #close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 20px;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }

@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigInteger;
+import java.time.Instant;
 
 @Data
 @NoArgsConstructor
@@ -25,5 +26,9 @@ public class MissionDto {
 
     private BigInteger current;
 
+    private Instant createdOn;
+
     private Long userId;
+
+    private Long imageId;
 }

@@ -26,13 +26,16 @@ public class ImageController {
         this.imageService = imageService;
     }
 
+    @RequestMapping("/upload/create")
+    public String welcome() {
+        return "createImage";
+    }
 
     @PostMapping("/upload/image")
-    public ResponseEntity<String> uploadImage(@RequestParam("image") MultipartFile image,
-                                              @RequestParam("userId") Long userId) {
+    public ResponseEntity<String> uploadImage(@RequestParam("image") MultipartFile image) {
         try {
             byte[] imageData = image.getBytes();
-            imageService.saveImage(imageData, userId);
+            imageService.saveImage(imageData);
             return ResponseEntity.ok("Image uploaded successfully.");
         } catch (IOException e) {
             e.printStackTrace();
@@ -40,9 +43,9 @@ public class ImageController {
         }
     }
 
-    @GetMapping("/upload/image/{userId}")
-    public ResponseEntity<byte[]> getImagesByUserId(@PathVariable Long userId) {
-        Image images = imageService.getImageByUserId(userId);
+    @GetMapping("/upload/image/{Id}")
+    public ResponseEntity<byte[]> getImageById(@PathVariable Long id) {
+        Image images = imageService.findById(id);
         if (images != null) {
             return ResponseEntity.ok(images.getImageData());
         } else {
